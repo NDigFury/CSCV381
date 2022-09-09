@@ -1,60 +1,55 @@
-package edu.arizona.cast.nikkiDiguardi.geoquiz
-
-import Question
+package edu.arizona.cast.nikkidiguardi.hellodate
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
-import edu.arizona.cast.nikkiDiguardi.geoquiz.databinding.ActivityMainBinding
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.annotation.RequiresApi
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import edu.arizona.cast.nikkidiguardi.hellodate.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityMainBinding
-
-    private val questionBank = listOf(
-        Question(R.string.question_australia, true),
-        Question(R.string.question_oceans, true),
-        Question(R.string.question_mideast, false),
-        Question(R.string.question_africa, false),
-        Question(R.string.question_americas, true),
-        Question(R.string.question_asia, true))
-
-    private var currentIndex = 0
+class MainActivity : AppCompatActivity(){
+    private var date_button: Button = findViewById(R.id.date_button)
+    private var display_date: TextView = findViewById(R.id.display_date)
+    // private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_main)
+        //binding = ActivityMainBinding.inflate(layoutInflater)
+        //setContentView(binding.root)
 
-        binding.trueButton.setOnClickListener { view: View ->
-            checkAnswer(true)
-        }
-        binding.falseButton.setOnClickListener { view: View ->
-            checkAnswer(false)
-        }
-        binding.nextButton.setOnClickListener {
-            currentIndex = (currentIndex + 1) % questionBank.size
-            updateQuestion()
+        //binding.date_button.setOnClickListener{
+        //displayDate()
+        //}
+        //binding.display_date.setText(displayDate())
 
-        }
-
-        updateQuestion()
+        display_date.setText(displayDate().toString())
+        //date_button.setOnClickListener{
+        // displayDate().toString()
+        // }
     }
-    private fun updateQuestion() {
-        val questionTextResId = questionBank[currentIndex].textResId
-        binding.questionTextView.setText(questionTextResId)
-    }
-    private fun checkAnswer(userAnswer: Boolean) {
-        val correctAnswer = questionBank[currentIndex].answer
 
-        val messageResId = if (userAnswer == correctAnswer) {
-            R.string.correct_toast
-        } else {
-            R.string.incorrect_toast
-        }
-
-        Toast.makeText(this, messageResId, Toast.LENGTH_SHORT)
-            .show()
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun displayDate() {
+        val dateTime = LocalDateTime.now()
+        //val display_date: TextView = findViewById(R.id.display_date) as TextView
+        display_date.text = dateTime.format(
+            // date_button.text = dateTime.format(
+            DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL).withZone(
+                ZoneId.systemDefault()
+            )
+        )
     }
+
 }
+
+
+
+
